@@ -1,0 +1,11 @@
+---
+sites:
+ mspay.com:
+  database: mspy_com
+  user: mspy
+  password: fafhJhjrhewj1233
+
+ faboo.info:
+  database: faboo_info
+  user: faboo
+  password: JbsgTe9de512wj

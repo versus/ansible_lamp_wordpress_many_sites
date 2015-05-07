@@ -1,0 +1,26 @@
+---
+# application tasks to be customized and to run after the main provision
+
+- name: download WordPress
+  get_url:
+    url: "{{ download_url }}"
+    dest: "/tmp/latest.tar.gz"
+
+- name: creating directory for WordPress
+  file:
+    path: "{{ wpdirectory }}"
+    state: "directory"
+    owner: "www-data"
+    group: "www-data"
+
+- name: unpack WordPress installation
+  shell: "tar xvfz /tmp/latest.tar.gz -C /tmp/"
+
+
+- name: sites WordPress installation
+  shell: "mkdir -p {{ wpdirectory }}/{{ item.key }}  &&  cp -r /tmp/wordpress/* {{ wpdirectory }}/{{ item.key }}/ && chown -R www-data:www-data {{ wpdirectory }}/{{ item.key }}"
+  with_dict: sites
+
+# TODO: create .htacess
+# TODO: create  wp-config.php
+# TODO: upload mysql tables ???? 

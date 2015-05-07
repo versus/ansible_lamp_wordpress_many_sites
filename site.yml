@@ -1,0 +1,28 @@
+---
+- hosts: vagrant
+  remote_user: vagrant
+  sudo: yes
+  vars:
+    web_server: nginxphp
+    servername: myApp.vb www.myApp.vb 146.148.71.36
+    timezone: Europe/Kiev
+
+  vars_files:
+    - vars/mysql.yml
+    - vars/sites.yml
+    - vars/common.yml
+    - vars/app.yml
+
+  roles:
+    - common
+    - mysql
+    - app
+
+
+
+
+
+
+
+
+

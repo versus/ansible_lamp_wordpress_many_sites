@@ -1,0 +1,5 @@
+---
+mysql:
+    mysqlTemplatePath: "../templates/my.cnf.j2"
+    root_password: "hEmRIg41Lunts"
+

@@ -1,0 +1,7 @@
+---
+    doc_root: /root
+    sys_packages: []
+    php_packages: ["php5-mysql"]
+    pecl_packages: []
+
+

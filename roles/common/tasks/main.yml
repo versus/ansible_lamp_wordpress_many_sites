@@ -1,0 +1,78 @@
+---
+- name: add debian backports repo
+  apt_repository: repo='deb http://http.debian.net/debian wheezy-backports main' state=present
+  when: ansible_distribution == 'Debian'
+
+- name: Update apt
+  sudo: yes
+  apt: update_cache=yes  cache_valid_time=3600
+
+- name: Install System Packages
+  sudo: yes
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - curl
+    - wget
+    - python-software-properties
+    - unzip
+    - mc
+    - vim-nox
+    - bsdutils
+    - less
+    - nano
+    - bash-completion
+    - python-mysqldb
+    - rsync
+    - sudo
+    - jnettop
+    - logrotate
+    - openssl
+    - ca-certificates
+    - ntp
+    - locales
+    - python-pip
+
+
+- name: Install Extra Packages
+  sudo: yes
+  apt: pkg={{ item }} state=latest
+  with_items: sys_packages
+
+- name: Configure the timezone
+  sudo: yes
+  template: src=timezone.tpl dest=/etc/timezone
+
+- name: More Configure the timezone
+  sudo: yes
+  file: src=/usr/share/zoneinfo/{{timezone}} dest=/etc/localtime state=link force=yes backup=yes
+
+- name: add locale gen file
+  lineinfile: dest=/etc/locale.gen line=en_US.UTF-8 state=present create=yes
+
+- locale_gen: name=en_US.UTF-8 state=present
+
+- name: set sudoers group no passwd
+  lineinfile: dest=/etc/sudoers state=present regexp='^%sudo ALL\=' line='%sudo ALL=(ALL) NOPASSWD:ALL' validate='visudo -cf %s'
+
+- name: setup kerq's key
+  authorized_key: user=root state=present key="{{ lookup('file', '../files/public_keys/kerq.pub') }}"
+
+- name: setup nexus' key
+  authorized_key: user=root state=present key="{{ lookup('file', '../files/public_keys/nexus.pub') }}"
+
+- name: setup ob's key
+  authorized_key: user=root state=present key="{{ lookup('file', '../files/public_keys/ob.pub') }}"
+
+- name: setup versus's key
+  authorized_key: user=root state=present key="{{ lookup('file', '../files/public_keys/versus.pub') }}"
+
+- name: setup additional keys
+  authorized_key: user=root state=present key="{{ item }}"
+  with_items: additional_keys
+  when: additional_keys is defined
+
+- name: set mcedit by default editor
+  shell: update-alternatives --set editor /usr/bin/mcedit
+  tags:
+    - editor
+    - defaults
