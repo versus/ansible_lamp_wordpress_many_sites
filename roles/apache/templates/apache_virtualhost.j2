@@ -1,0 +1,41 @@
+ServerAdmin webmaster@loalhost
+ServerSignature Off
+ServerTokens Prod
+
+<IfModule mpm_prefork_module>
+    StartServers 2
+    MinSpareServers 1 
+    MaxSpareServers 2
+    MaxClients          50
+    MaxRequestsPerChild 100
+</IfModule>
+
+
+<VirtualHost *:80>
+
+ServerName {{item.key}}
+ServerAlias www.{{item.key}}
+
+DocumentRoot /var/www/{{item.key}}
+
+<Directory />
+        Options FollowSymLinks
+        AllowOverride All
+</Directory>
+
+<Directory /var/www/{{item.key}}>
+        Options FollowSymLinks MultiViews
+        AllowOverride All
+        Order allow,deny
+        allow from all
+</Directory>
+
+ErrorLog /var/log/apache2/{{item.key}}_error.log
+
+# Possible values include: debug, info, notice, warn, error, crit,
+# alert, emerg.
+LogLevel warn
+
+CustomLog /var/log/apache2/{{item.key}}_access.log combined
+
+</VirtualHost>

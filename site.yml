@@ -8,6 +8,7 @@
     timezone: Europe/Kiev
 
   vars_files:
+    - vars/apachephp.yml
     - vars/mysql.yml
     - vars/sites.yml
     - vars/common.yml
@@ -16,6 +17,7 @@
   roles:
     - common
     - mysql
+    - apache
     - app
 
 

@@ -21,6 +21,10 @@
   shell: "mkdir -p {{ wpdirectory }}/{{ item.key }}  &&  cp -r /tmp/wordpress/* {{ wpdirectory }}/{{ item.key }}/ && chown -R www-data:www-data {{ wpdirectory }}/{{ item.key }}"
   with_dict: sites
 
+- name: copy htaccess
+  copy: src=../files/htaccess dest={{ wpdirectory }}/{{ item.key }}/.htaccess owner=www-data group=www-data mode=644 backup=yes
+  with_dict: sites
+
 # TODO: create .htacess
 # TODO: create  wp-config.php
 # TODO: upload mysql tables ???? 
